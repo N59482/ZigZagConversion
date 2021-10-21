@@ -1,67 +1,43 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
-using namespace std;
-
 class Solution {
 public:
-    void show(string & s)
-        {
-            for (auto & i : s)
-                {
-                    cout<<i<<" ";
-                }
-                cout<<endl;
-        };
-    void show(vector<string> & l)
-        {
-            for (auto & i : l)
-                {
-                    show(i);
-                }
-                cout<<endl;
-        };
-    char cut_front(string & str)
+
+    char cut_front(string & str) // возвращает первый элемент строки удаляя его из строки.
         {
             char bit = str.at(0);
             str.erase(str.begin());
-            cout<<"cut_front()\n";
             return bit;
         };
 
-    string convert(string s, int numRows) 
+    string convert(string s, int numRows)// основная функция 
     {
-        cout<<"convert get ";
-        show(s);
-        vector<string> lines(numRows);
-        bool up = 0;
-        int i = -1;
+        vector<string> lines(numRows);// линии для кодировки строки
+        bool up = 0; // индикатор движения кодировки вверх по строкам
+        int it = -1; // итератор для движения по линиям.
+        string res; // ответ.
+        
+        if(numRows == 1) return s; // если количество линий равно 1 ничего делать не нужно.
+        
+        // кодируем строки в несколько линий
         numRows--;
-        while(s.size())
+        while(s.size()) // пока строка не кончилась
             {
-                if(up) i--;
-                    else i++; 
+                if(up) it--; // итератор увеличивается при движении вниз и уменьшается при движении вниз
+                    else it++; 
                 
-                lines.at(i) += cut_front(s);
+                lines.at(it) += cut_front(s); // записываем  символ в соответствующую линию.
                 
-                if(i == numRows) up = 1;
-                    else if (i == 0 && up) up = 0;
+                // меняем индикатор двидения вврерх/вниз в зависимости от достижения первой и последней линии.
+                if(it == numRows) up = 1;
+                    else if (it == 0 && up) up = 0;
             };
-        cout<<"convert push \n";
-        show(lines);
-        return " ";
+        numRows++;
+
+        // записываем все получившиеся линии в одну строку
+        for(auto & i : lines)
+            {
+                res += i;
+            }
+            
+        return res;
     }
-};
-
-int main()
-{
-    Solution s;
-    string teststr = "hellomrsboobs";
-    s.convert(teststr, 3);
-    
-
-
-
-    return 0;
 };
